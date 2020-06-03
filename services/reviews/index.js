@@ -34,7 +34,7 @@ const resolvers = {
       return { __typename: "User", id: review.authorID };
     },
     unionAuthor(review) {
-      return { __typename: "Looser", id: review.authorID };
+      return { __typename: "UserOrLooser", id: review.authorID };
     }
   },
   User: {
@@ -52,6 +52,11 @@ const resolvers = {
   Product: {
     reviews(product) {
       return reviews.filter(review => review.product.upc === product.upc);
+    }
+  },
+  UserOrLooser: {
+    __resolveType(obj, context, info) {
+      return "Looser";
     }
   }
 };

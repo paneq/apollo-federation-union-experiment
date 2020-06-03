@@ -39,6 +39,14 @@ const resolvers = {
     __resolveReference(object) {
       return loosers.find(user => user.id === object.id);
     }
+  },
+  UserOrLooser: {
+    // __resolveType(obj, context, info){
+    //   return "Looser";
+    // },
+    __resolveReference(object) {
+      return loosers.find(user => user.id === object.id);
+    }
   }
 };
 
