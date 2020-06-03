@@ -7,6 +7,7 @@ const typeDefs = gql`
     body: String
     author: User @provides(fields: "username")
     product: Product
+    unionAuthor: UserOrLooser
   }
 
   extend type User @key(fields: "id") {
@@ -14,6 +15,12 @@ const typeDefs = gql`
     username: String @external
     reviews: [Review]
   }
+
+  extend type Looser @key(fields: "id")  {
+    id: ID! @external
+  }
+
+  union UserOrLooser = User | Looser
 
   extend type Product @key(fields: "upc") {
     upc: String! @external
@@ -25,6 +32,9 @@ const resolvers = {
   Review: {
     author(review) {
       return { __typename: "User", id: review.authorID };
+    },
+    unionAuthor(review) {
+      return { __typename: "Looser", id: review.authorID };
     }
   },
   User: {

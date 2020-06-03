@@ -6,11 +6,22 @@ const typeDefs = gql`
     me: User
   }
 
-  type User @key(fields: "id") {
+  interface WithName {
+    name: String
+  }
+
+  type User implements WithName @key(fields: "id") {
     id: ID!
     name: String
     username: String
   }
+  
+  type Looser implements WithName @key(fields: "id")  {
+    id: ID!
+    name: String
+  }
+  
+  union UserOrLooser = User | Looser
 `;
 
 const resolvers = {
@@ -22,6 +33,11 @@ const resolvers = {
   User: {
     __resolveReference(object) {
       return users.find(user => user.id === object.id);
+    }
+  },
+  Looser: {
+    __resolveReference(object) {
+      return loosers.find(user => user.id === object.id);
     }
   }
 };
@@ -51,5 +67,16 @@ const users = [
     name: "Alan Turing",
     birthDate: "1912-06-23",
     username: "@complete"
+  }
+];
+
+const loosers = [
+  {
+    id: "1",
+    name: "Ada Lovelace",
+  },
+  {
+    id: "2",
+    name: "Alan Turing",
   }
 ];
